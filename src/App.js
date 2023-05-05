@@ -3,7 +3,8 @@ import alanbtn from '@alan-ai/alan-sdk-web';
 
 import NewsCards from './components/NewsCards/NewsCards';
 
-
+import wordsToNumbers from 'words-to-numbers';
+import alanBtn from '@alan-ai/alan-sdk-web';
 
 const App = () => {
     const [newsArticles, setNewsArticles] = useState([]);
@@ -23,8 +24,19 @@ const App = () => {
                     setActiveArticle((prevActiveArticle) => prevActiveArticle + 1);
                 }
                 else if (command === 'open') {
+                    const parsedNum = number.length > 2 ? wordsToNumbers(number, { fuzzy: true }) : number;
+
+                    const art = articles.articles[parsedNum - 1];
+                    if (parsedNum > 20) {
+                        alanBtn().playText('Please try that again')
+                    }
+                    else if (art) {
+                        window.open(art.url, '_blank');
+                        alanBtn.playText("Opening....")
+
+                    }
                     console.log(number);
-                    window.open(articles.articles[number].url, '_blank');
+
                 }
 
 
